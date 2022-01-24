@@ -3,7 +3,6 @@ from collections import Counter
 
 
 def find_words(
-    num_letters: int,
     current_guess: list,
     dict_words: str,
     letters_in_word: list,
@@ -12,7 +11,7 @@ def find_words(
     words = [
         word
         for word in dict_words
-        if len(word) == num_letters
+        if len(word) == 5
         and is_possible_guess(word, current_guess, letters_in_word, letters_not_in_word)
     ]
 
@@ -24,7 +23,7 @@ def is_possible_guess(
 ) -> bool:
     word_counter = Counter(word)
     for letter in letters_in_word:
-        if letter not in word or letters_in_word[letter] != word_counter[letter]:
+        if letter not in word or word_counter[letter] < letters_in_word[letter]:
             return False
 
     for guess, letter in zip(current_guess, word):
@@ -49,24 +48,51 @@ with urllib.request.urlopen(
 guesses = [
     [
         {
-            "letter": "w",
-            "correct_position": True,
-            "in_word": True,
+            "letter": "h",
+            "correct_position": False,
+            "in_word": False,
         },
         {
-            "letter": "e",
+            "letter": "a",
+            "correct_position": False,
+            "in_word": False,
+        },
+        {
+            "letter": "p",
+            "correct_position": False,
+            "in_word": False,
+        },
+        {
+            "letter": "p",
+            "correct_position": False,
+            "in_word": False,
+        },
+        {
+            "letter": "y",
+            "correct_position": False,
+            "in_word": False,
+        },
+    ],
+    [
+        {
+            "letter": "w",
+            "correct_position": False,
+            "in_word": False,
+        },
+        {
+            "letter": "o",
             "correct_position": False,
             "in_word": True,
         },
         {
-            "letter": "e",
+            "letter": "r",
             "correct_position": False,
             "in_word": False,
         },
         {
             "letter": "k",
             "correct_position": False,
-            "in_word": False,
+            "in_word": True,
         },
         {
             "letter": "s",
@@ -76,39 +102,39 @@ guesses = [
     ],
     [
         {
-            "letter": "w",
-            "correct_position": True,
-            "in_word": True,
-        },
-        {
-            "letter": "h",
+            "letter": "b",
             "correct_position": False,
             "in_word": False,
-        },
-        {
-            "letter": "i",
-            "correct_position": False,
-            "in_word": True,
         },
         {
             "letter": "l",
             "correct_position": False,
+            "in_word": True,
+        },
+        {
+            "letter": "o",
+            "correct_position": True,
+            "in_word": True,
+        },
+        {
+            "letter": "c",
+            "correct_position": False,
             "in_word": False,
         },
         {
-            "letter": "e",
-            "correct_position": True,
+            "letter": "k",
+            "correct_position": False,
             "in_word": True,
         },
     ],
 ]
 
-letters_not_in_word = ["k", "s", "h", "l"]
+letters_not_in_word = ["h", "a", "p", "y", "w", "r", "s", "b", "c"]
 letters_in_word = {
-    "w": 1,
-    "e": 1,
-    "i": 1,
+    "o": 1,
+    "k": 1,
+    "l": 1,
 }
 
 
-print(find_words(5, guesses[0], words, letters_in_word, letters_not_in_word))
+print(find_words(guesses[2], words, letters_in_word, letters_not_in_word))
