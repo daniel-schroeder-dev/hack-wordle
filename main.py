@@ -1,5 +1,40 @@
 import urllib.request
 from collections import Counter
+from string import ascii_lowercase
+
+
+def freq_score(word, f_table):
+    pre_sum = sum([f_table[l] for l in word])
+    # weighted for uniques
+    return pre_sum * len(set(word))
+
+
+def get_words_sorted_by_freq(words):
+    frequencies = Counter({letter: 0 for letter in ascii_lowercase})
+
+    # words is whatever data set of words you have
+    for w in words:
+        for letter in w:
+            frequencies[letter] += 1
+
+    # each word is already len 5
+    total_letters = len(words) * 5
+
+    # relative frequency
+    freq_table = {
+        letter: freq / total_letters for (letter, freq) in frequencies.items()
+    }
+
+    word_freqs = []
+
+    for w in words:
+        score = freq_score(w, freq_table)
+        word_freqs.append([w, score])
+
+    # sort by frequency score
+    word_freqs.sort(key=lambda wf: wf[1], reverse=True)
+
+    return [word for word, _ in word_freqs]
 
 
 def find_words(
@@ -15,7 +50,7 @@ def find_words(
         and is_possible_guess(word, current_guess, letters_in_word, letters_not_in_word)
     ]
 
-    return words
+    return get_words_sorted_by_freq(words)[:50]
 
 
 def is_possible_guess(
@@ -129,12 +164,33 @@ guesses = [
     ],
 ]
 
+letters_not_in_word = ["h", "a", "p", "y"]
+letters_in_word = {
+
+}
+
+print("\n\n", "#" * 20, "First Pass", "#" * 20, "\n\n")
+print(find_words(guesses[0], words, letters_in_word, letters_not_in_word))
+print("\n\n", "#" * 50, "\n\n")
+
+letters_not_in_word = ["h", "a", "p", "y", "w", "r", "s"]
+letters_in_word = {
+    "o": 1,
+    "k": 1,
+}
+
+print("\n\n", "#" * 20, "Second Pass", "#" * 20, "\n\n")
+print(find_words(guesses[1], words, letters_in_word, letters_not_in_word))
+print("\n\n", "#" * 50, "\n\n")
+
+
 letters_not_in_word = ["h", "a", "p", "y", "w", "r", "s", "b", "c"]
 letters_in_word = {
     "o": 1,
     "k": 1,
-    "l": 1,
+    "l": 1
 }
 
-
+print("\n\n", "#" * 20, "Third Pass", "#" * 20, "\n\n")
 print(find_words(guesses[2], words, letters_in_word, letters_not_in_word))
+print("\n\n", "#" * 50, "\n\n")
